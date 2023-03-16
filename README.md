@@ -1,6 +1,16 @@
-# Notes personnelles ([:earth_africa: web](https://mahikeul.github.io/))
+# Notes personnelles
 
-## Grub : ajouter une entrée de démarrage de LiveCD
+## Kubernetes : podman (possibly rootless)
+- k3d : https://k3d.io/v5.4.2/usage/advanced/podman/
+- k3s : 
+- kind : https://kind.sigs.k8s.io/docs/user/rootless/ | https://podman-desktop.io/docs/kubernetes/kind (WSL)
+- minikube : https://minikube.sigs.k8s.io/docs/drivers/podman/
+- inside kubernetes : https://www.redhat.com/sysadmin/podman-inside-kubernetes
+
+## Vim : copy to clipboard
+- `vim --version` : `+xterm_clipboard` needed :  https://stackoverflow.com/a/14225889
+
+## Grub : ajouter une entrée pour démarrer un LiveCD
 
 ### Exemple avec partition racine fixe
 - [Images Debian avec firmwares non libres](https://cdimage.debian.org/images/unofficial/non-free/images-including-firmware/)
@@ -22,9 +32,10 @@ menuentry "debian-live-11.6.0-amd64-xfce+nonfree" {
 }
 ```
 
-### Version finale _dynamique_ avec une seule entrée
+### Version _dynamique_ avec une seule entrée
 - Image ISO LiveCD **Debian** sur la partition de boot.
-- Extraction automatique des noms des fichiers de boot.
+- Extraction automatique des noms des fichiers de boot (via `mount $file $dir -o loop -r`).
+- Avec [désactivation du module TPM](https://askubuntu.com/a/1244886) (via `rmmod tpm`).
 ```shell
 #!/bin/sh
 set -e
@@ -58,15 +69,8 @@ rmmod tpm
 load_video
 insmod gzio
 
-set iso_file="$iso_file"
-
-echo "loopback loop $iso_file"
-loopback loop \$iso_file
-
-echo "linux (loop)/$iso_kernel findiso=$iso_file $loop_options"
-linux (loop)/$iso_kernel findiso=\$iso_file $loop_options
-
-echo "initrd (loop)/$iso_initrd"
+loopback loop $iso_file
+linux (loop)/$iso_kernel findiso=$iso_file $loop_options
 initrd (loop)/$iso_initrd
 EOF
 
