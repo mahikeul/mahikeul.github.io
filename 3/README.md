@@ -1,4 +1,7 @@
-# Activer le DNS over TLS  (Debian `12` *bookworm*)
+***Activer le DNS over TLS  (Debian `12` *bookworm*)***
+---
+<br />
+
 - Avant tout, quelques liens vers une liste de serveurs DNS respectueux :
   - https://www.opennic.org/
   - https://www.fdn.fr/actions/dns/
