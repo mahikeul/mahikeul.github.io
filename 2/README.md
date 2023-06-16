@@ -3,7 +3,11 @@
 <br />
 
 # Mise en place de l'infrastructure, avec `Kind`
-* [Installation de `kind`](https://kind.sigs.k8s.io/docs/user/quick-start/)
+* Alternatives :
+  * [`k3d`](https://k3d.io/v5.4.2/usage/advanced/podman/)
+  * `k3s`
+  * [`minikube`](https://minikube.sigs.k8s.io/docs/drivers/podman/)
+* [Installation de `kind`](https://kind.sigs.k8s.io/docs/user/quick-start/).
 * Rootless :
   * avec [Linux](https://kind.sigs.k8s.io/docs/user/rootless/), et [Docker](https://docs.docker.com/go/rootless/) ou [Podman](https://github.com/containers/podman/blob/master/docs/tutorials/rootless_tutorial.md)
   * avec [WSL et Podman](https://podman-desktop.io/docs/kubernetes/kind)
@@ -12,20 +16,20 @@
 ## Exemple sous Debian Testing (`12` *bookworm*) en *rootless* avec Podman
 * Installation de `kubectl` (`1.27.1`) (doc sur [kubernetes.io](https://kubernetes.io/fr/docs/tasks/tools/install-kubectl/#installation-%C3%A0-l-aide-des-gestionnaires-des-paquets-natifs)) :
 ```shell
-sudo apt-get update && sudo apt-get install -y apt-transport-https
+sudo apt-get update && sudo apt-get install apt-transport-https
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update && sudo apt-get install -y kubectl
+sudo apt-get update && sudo apt-get install kubectl
 ```
-* Installation de podman (`4.3.1`), slirp4netns (`1.2.0`), fuse-overlayfs (`1.10`) et golang (`1.19`)  
-  (pour installer la version `1.20` de `kubectl` de la distribution, ajouter `kubernetes-client`) :
+* Installation de podman ([`4.3.1`](https://packages.debian.org/testing/podman)), slirp4netns ([`1.2.0`](https://packages.debian.org/testing/slirp4netns)), fuse-overlayfs ([`1.10`](https://packages.debian.org/testing/fuse-overlayfs)) et golang ([`1.19`](https://packages.debian.org/testing/golang))  
+  (pour installer la version de `kubectl` de la distribution, ajouter [`kubernetes-client`](https://packages.debian.org/testing/kubernetes-client)) :
 ```shell
 sudo apt-get install podman slirp4netns fuse-overlayfs golang
 ```
-* Installation de kind (`0.19.0`) (d'autres méthodes d'installation dans la [doc](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-install))  
-  (`${HOME}/go/bin` doit être dans le `$PATH` pour que la commande `kind` soit ensuite disponible) :
+* Installation de kind (`0.20.0`) (autres méthodes d'installation et dernière version dans la [doc](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-install))  
+  (`${HOME}/go/bin` doit être dans le `$PATH` pour que la commande `kind` soit ensuite disponible: `sudo micro /etc/profile`) :
 ```shell
-go install sigs.k8s.io/kind@v0.19.0
+go install sigs.k8s.io/kind@v0.20.0
 ```
 * Variable d'environnement à modifier pour que `kind` utilise `podman`  
   (par exemple, pour une prise en compte globale, l'ajouter au fichier `/etc/environment`) :
@@ -33,7 +37,7 @@ go install sigs.k8s.io/kind@v0.19.0
 KIND_EXPERIMENTAL_PROVIDER=podman
 ```
 * Création simple d'un cluster nommé `vasco`  
-  (la version de K8s venant par défaut avec `kind` `0.19.0` est la `1.27.1`, d'autres images disponibles dans les [notes de version](https://github.com/kubernetes-sigs/kind/releases)).  
+  (la version de K8s venant par défaut avec `kind` `0.20.0` est la `1.27.3`, d'autres images disponibles dans les [notes de version](https://github.com/kubernetes-sigs/kind/releases)).  
   Sans l'option `--name {cluster}`, le nom du cluster est `kind`.  
   Si un nom est paramétré à la création, cette option (`--name {cluster}`) devra être ajoutée à toute commande `kind`.
 ```shell
@@ -42,6 +46,10 @@ kind create cluster --name vasco
 * Suppression du cluster :
 ```shell
 kind delete cluster --name vasco
+```
+* Pour avoir des informations sur le cluster (le contexte Kubernetes créé par `kind` étant `kind-{cluster-name}`) :
+```shell
+kubectl cluster-info --context kind-vasco
 ```
 * Fichier de configuration du cluster (si `$KUBECONFIG` vide) : `${HOME}/.kube/config`
 * Liste des clusters créés par `kind`:
@@ -96,3 +104,6 @@ kubectl -n kubernetes-dashboard create token admin-user
 # Mise en place de [Helm](https://helm.sh/docs/intro/quickstart/), package manager for Kubernetes
 * [Installation](https://helm.sh/docs/intro/install/)
 * [Packages disponibles](https://artifacthub.io/packages/search)
+
+# Pour aller plus loin
+* [How to use Podman inside of Kubernetes](https://www.redhat.com/sysadmin/podman-inside-kubernetes)

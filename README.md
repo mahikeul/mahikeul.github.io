@@ -2,13 +2,6 @@
 ---
 <br />
 
-# Kubernetes : podman (possibly rootless)
-- k3d : https://k3d.io/v5.4.2/usage/advanced/podman/
-- k3s : 
-- kind : https://kind.sigs.k8s.io/docs/user/rootless/ | https://podman-desktop.io/docs/kubernetes/kind (WSL)
-- minikube : https://minikube.sigs.k8s.io/docs/drivers/podman/
-- inside kubernetes : https://www.redhat.com/sysadmin/podman-inside-kubernetes
-
 # Vim : copy to clipboard
 - `vim --version` : `+xterm_clipboard` needed :  https://stackoverflow.com/a/14225889
 
@@ -57,4 +50,52 @@ ou
 ```shell
 sudo apt install apt-file && sudo apt-file update
 apt-file search /path/to/file 
+```
+# Quelques containeurs utiles
+- Pour installer `podman`, voir l'article [k8s local](2/README.md).
+- [Cockpit](), pour gérer visuellement les containeurs (entre autres), par défaut à l'adresse `http://localhost:9090` :
+```shell
+sudo apt install cockpit-podman
+```
+- [PlantUML](https://plantuml.com/), pour générer localement les diagrammes dans [VSCode](https://open-vsx.org/extension/jebbs/plantuml) :  
+([*image docker hub*](https://hub.docker.com/r/plantuml/plantuml-server))
+```shell
+podman run -p 9001:8080 --name plantuml-server docker.io/plantuml/plantuml-server:jetty
+```
+- [Kroki](https://kroki.io/), pour générer localement les diagrammes avec l'extension navigateur [Markdown Diagrams](https://chrome.google.com/webstore/detail/markdown-diagrams/pmoglnmodacnbbofbgcagndelmgaclel) :  
+([*image docker hub*](https://hub.docker.com/r/yuzutech/kroki))
+```shell
+podman run -p 9005:8000 --name kroki docker.io/yuzutech/kroki
+```
+- [Swagger-UI](https://swagger.io/tools/swagger-ui/), quand l'UI n'est pas intégrée au microservice :  
+([*image docker hub*](https://hub.docker.com/r/swaggerapi/swagger-ui))
+```shell
+podman run -p 9002:8080 --name swagger-ui docker.io/swaggerapi/swagger-ui
+```
+# [VSCodium](https://github.com/VSCodium/vscodium/), VS Code sans télémétrie, ni extension propriétaire.
+- Installation :
+```
+sudo apt install extrepo
+sudo extrepo enable vscodium
+sudo apt update
+sudo apt install codium
+```
+- Extensions utilisées ([du magasin *OpenSource* par défaut](https://open-vsx.org/)) :
+  - [kubernetes](https://open-vsx.org/extension/ms-kubernetes-tools/vscode-kubernetes-tools) : nécessite `kubectl`, `docker` ou `buildah`, `helm` (pour installation, voir article [k8s local](2/README.md)).
+  - [PlantUML](https://open-vsx.org/extension/jebbs/plantuml) : utilisation locale de [`plantuml-server`](https://github.com/plantuml/plantuml-server) recommandée (voir l'article [Quelques containeurs utiles](#quelques-containeurs-utiles)).
+
+# [Barrier](https://github.com/debauchee/barrier), partage de clavier/souris/presse-papier entre ordinateurs
+- Installation :
+```
+sudo apt install barrier
+```
+- Configuration serveur ([mise en place du certificat SSL](https://stackoverflow.com/questions/67343804/error-ssl-certificate-doesnt-exist-home-rsvay-snap-barrier-kvm-2-local-shar)) :
+```
+cd ${HOME}/.local/share/barrier/SSL/
+openssl req -x509 -nodes -days 365 -subj /CN=barrier -newkey rsa:4096 -keyout Barrier.pem -out Barrier.pem
+```
+- Configuration client (SSL activé) : accepter manuellement le *fingerprint* lors de la connexion, ou le générer sur le serveur et déplacer le fichier sur le client dans le répertoire `${HOME}/.local/share/barrier/SSL/Fingerprints` (ou copier son contenu dans le fichier `TrustedServers.txt` dans ce même répertoire).
+```
+openssl x509 -fingerprint -sha256 -noout -in Barrier.pem > Fingerprints/Local.txt
+sed -e "s/.*=/v2:sha256:/" -i Fingerprints/Local.txt
 ```
