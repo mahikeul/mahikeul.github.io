@@ -26,10 +26,10 @@ sudo apt-get update && sudo apt-get install kubectl
 ```shell
 sudo apt-get install podman slirp4netns fuse-overlayfs golang
 ```
-* Installation de kind (`0.20.0`) (autres méthodes d'installation et dernière version dans la [doc](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-install))  
+* Installation de kind (`latest` = `v0.20.0`) (autres méthodes d'installation et dernière version dans la [doc](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-install))  
   (`${HOME}/go/bin` doit être dans le `$PATH` pour que la commande `kind` soit ensuite disponible: `sudo micro /etc/profile`) :
 ```shell
-go install sigs.k8s.io/kind@v0.20.0
+go install sigs.k8s.io/kind@latest
 ```
 * Variable d'environnement à modifier pour que `kind` utilise `podman`  
   (par exemple, pour une prise en compte globale, l'ajouter au fichier `/etc/environment`) :
@@ -72,10 +72,10 @@ kind export logs --name vasco
 ```
 
 # Déploiement du [Dashboard Kubernetes](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
-* En ligne de commande, pour avoir la liste des *namespace*, *node*, *endpoints*, *service*, *service account* et *secret* Kubernetes de tous les *namespace*  
+* En ligne de commande, pour avoir la liste des *namespace*, *node*, *pods*, *endpoints*, *service*, *service account* et *secret* Kubernetes de tous les *namespace*  
 (pour avoir la liste de toutes les ressources interrogeables : `kubectl api-resources`) :
 ```shell
-kubectl get --all-namespaces ns,no,ep,svc,sa,secrets
+kubectl get --all-namespaces ns,no,po,ep,svc,sa,secrets
 ```
 * Pour déployer le tableau de bord en version `2.7.0` (voir les dernières [releases](https://github.com/kubernetes/dashboard/releases)) :
 ```shell

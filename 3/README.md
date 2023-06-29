@@ -38,3 +38,18 @@ nmcli connection modify <UUID> connection.dns-over-tls 2
 ```
 sudo systemctl restart NetworkManager.service
 ```
+## Remarque avec `podman` (et _certainement_ `docker`)
+`podman`, par mesure de sécurité, n'interroge pas les adresses locales lorsque le réseau utilisé est celui par défaut : les conteneurs ne pourront pas interroger le serveur DNS local (en `127.0.0.53`) mis à disposition par `systemd-resolved` ([ref](https://github.com/containers/podman/issues/3277)).  
+- La solution est de créer un nouveau réseau ([ref](https://blog.podman.io/2023/02/the-container-name-resolution-conundrum/)) :
+```shell
+podman network create {nouveau réseau}
+```
+- Ou d'utiliser un réseau autre que celui par défaut (`podman`).  
+Par exemple, utiliser le réseau `kind` créé lors de la [mise en place d'un environnement Kubernetes local](../2/README.md).  
+Pour voir la liste des réseaux créés :
+```shell
+podman network ls
+```  
+- puis de :
+  - soit paramétrer le réseau au lancement du conteneur, en ajoutant l'option `--network {nouveau réseau}`.
+  - soit configuer ce nouveau réseau comme réseau par défaut, en ajoutant la ligne `default_network = "{nouveau réseau}"` à la section `[network]` du fichier `/etc/containers/containers.conf`.
