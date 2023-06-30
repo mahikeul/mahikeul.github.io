@@ -3,7 +3,16 @@
 ## [Mise en place d'un environnement Kubernetes local](k8s-local/README.md)
 ## [Activer le DNS over TLS](dns-over-tls/README.md)
 ## Vim : copy to clipboard
-- `vim --version` : `+xterm_clipboard` needed ([&#x21aa; source](https://stackoverflow.com/a/14225889))
+`vim --version` : `+xterm_clipboard` needed ([&#x21aa; source](https://stackoverflow.com/a/14225889))
+## NetworkManager
+- Pour qu'une connexion (_VPN_ par exemple) ne soit jamais la _route_ par défaut (pour pouvoir accéder à Internet si la connexion cible un réseau fermé) :
+```shell
+nmcli connection modify <UUID> ipv4.never-default true
+```
+- Pour avoir des informations sur un paramètre d'une connexion, passer en mode édition avec la commande suivante sur la connexion `<UUID>` visée, puis invoquer `describe {nom-du-paramètre}` (par exemple, `describe ipv4.never-default`) :
+```shell
+nmcli connection edit <UUID>
+```
 ## Commande `bash` pour comparer 2 listes de variables d'environnement extrait de 2 fichiers différents
 ```shell
 diff <(sed -n 's/^.*\${\([^}\:]*\)\(\:[^}\:]*\)\?}.*$/\1/p' application.yml | sort -u) <(yq -r '.env | keys | @tsv' values.yaml | sed 's/\t/\n/g' | sort)
@@ -38,7 +47,7 @@ dpkg -S /path/to/file
 ```shell
 dpkg-query -S '/path/to/file'
 ```
-ou, après un `sudo apt install apt-file && sudo apt-file update`
+ou, après les commandes `sudo apt install apt-file` et `sudo apt-file update` :
 ```shell
 apt-file search /path/to/file 
 ```
