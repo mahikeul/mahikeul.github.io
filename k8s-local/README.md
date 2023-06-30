@@ -1,8 +1,5 @@
-***Environnement Kubernetes local***
----
-<br />
-
-# Mise en place de l'infrastructure, avec `Kind`
+# Environnement Kubernetes local
+## Mise en place de l'infrastructure, avec `Kind`
 * Alternatives :
   * [`k3d`](https://k3d.io/v5.4.2/usage/advanced/podman/)
   * `k3s`
@@ -12,8 +9,7 @@
   * avec [Linux](https://kind.sigs.k8s.io/docs/user/rootless/), et [Docker](https://docs.docker.com/go/rootless/) ou [Podman](https://github.com/containers/podman/blob/master/docs/tutorials/rootless_tutorial.md)
   * avec [WSL et Podman](https://podman-desktop.io/docs/kubernetes/kind)
 * [Configuration avancée pour la création d'un cluster](https://kind.sigs.k8s.io/docs/user/configuration/)
-    
-## Exemple sous Debian Testing (`12` *bookworm*) en *rootless* avec Podman
+### Exemple sous Debian Testing (`12` *bookworm*) en *rootless* avec Podman
 * Installation de `kubectl` (`1.27.1`) (doc sur [kubernetes.io](https://kubernetes.io/fr/docs/tasks/tools/install-kubectl/#installation-%C3%A0-l-aide-des-gestionnaires-des-paquets-natifs)) :
 ```shell
 sudo apt-get update && sudo apt-get install apt-transport-https
@@ -70,14 +66,13 @@ podman exec -it vasco-control-plane crictl pods
 ```shell
 kind export logs --name vasco
 ```
-
-# Déploiement du [Dashboard Kubernetes](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
+## Déploiement du [Dashboard Kubernetes](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
 * En ligne de commande, pour avoir la liste des *namespace*, *node*, *pods*, *endpoints*, *service*, *service account* et *secret* Kubernetes de tous les *namespace*  
 (pour avoir la liste de toutes les ressources interrogeables : `kubectl api-resources`) :
 ```shell
 kubectl get --all-namespaces ns,no,po,ep,svc,sa,secrets
 ```
-* Pour déployer le tableau de bord en version `2.7.0` (voir les dernières [releases](https://github.com/kubernetes/dashboard/releases)) :
+* Pour déployer le tableau de bord en version `2.7.0` ([&#x21aa; les dernières releases](https://github.com/kubernetes/dashboard/releases)) :
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 ```
@@ -100,10 +95,8 @@ kubectl -n kubernetes-dashboard create clusterrolebinding admin-user --clusterro
 ```shell
 kubectl -n kubernetes-dashboard create token admin-user
 ```
-
-# Mise en place de [Helm](https://helm.sh/docs/intro/quickstart/), package manager for Kubernetes
+## Mise en place de [Helm](https://helm.sh/docs/intro/quickstart/), package manager for Kubernetes
 * [Installation](https://helm.sh/docs/intro/install/)
 * [Packages disponibles](https://artifacthub.io/packages/search)
-
-# Pour aller plus loin
+## Pour aller plus loin
 * [How to use Podman inside of Kubernetes](https://www.redhat.com/sysadmin/podman-inside-kubernetes)

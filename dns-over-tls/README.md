@@ -1,7 +1,4 @@
-***Activer le DNS over TLS  (Debian `12` *bookworm*)***
----
-<br />
-
+# Activer le DNS over TLS  (Debian `12` *bookworm*)
 - Avant tout, quelques liens vers une liste de serveurs DNS respectueux :
   - https://www.opennic.org/
   - https://www.fdn.fr/actions/dns/
@@ -39,13 +36,13 @@ nmcli connection modify <UUID> connection.dns-over-tls 2
 sudo systemctl restart NetworkManager.service
 ```
 ## Remarque avec `podman` (et _certainement_ `docker`)
-`podman`, par mesure de sécurité, n'interroge pas les adresses locales lorsque le réseau utilisé est celui par défaut : les conteneurs ne pourront pas interroger le serveur DNS local (en `127.0.0.53`) mis à disposition par `systemd-resolved` ([ref](https://github.com/containers/podman/issues/3277)).  
-- La solution est de créer un nouveau réseau ([ref](https://blog.podman.io/2023/02/the-container-name-resolution-conundrum/)) :
+`podman`, par mesure de sécurité, n'interroge pas les adresses locales lorsque le réseau utilisé est celui par défaut : les conteneurs ne pourront pas interroger le serveur DNS local (en `127.0.0.53`) mis à disposition par `systemd-resolved` ([&#x21aa; source](https://github.com/containers/podman/issues/3277)).  
+- La solution est de créer un nouveau réseau ([&#x21aa; source](https://blog.podman.io/2023/02/the-container-name-resolution-conundrum/)) :
 ```shell
 podman network create {nouveau réseau}
 ```
 - Ou d'utiliser un réseau autre que celui par défaut (`podman`).  
-Par exemple, utiliser le réseau `kind` créé lors de la [mise en place d'un environnement Kubernetes local](../2/README.md).  
+Par exemple, utiliser le réseau `kind` créé lors de la [mise en place d'un environnement Kubernetes local](../k8s-local/README.md).  
 Pour voir la liste des réseaux créés :
 ```shell
 podman network ls

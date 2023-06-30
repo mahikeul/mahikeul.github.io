@@ -1,8 +1,5 @@
-***Grub : ajouter une entrée pour démarrer un LiveCD (Debian `12` *bookworm*)***
----
-<br />
-
-# Exemple avec partition racine fixe
+# Grub : ajouter une entrée pour démarrer un LiveCD (Debian `12` *bookworm*)
+## Exemple avec partition racine fixe
 - [Images Debian avec firmwares non libres](https://cdimage.debian.org/images/unofficial/non-free/images-including-firmware/)
 - Partition de boot de type `ext2`, table de partition `msdos`, première partition du premier disque (`(hd0,msdos1)`), image ISO déposée dans le sous-répertoire `images/`, noms des fichiers (kernel et initrd) extraits de l'image (`*-5.10.0-18-amd64`)
 ```shell
@@ -21,8 +18,7 @@ menuentry "debian-live-11.6.0-amd64-xfce+nonfree" {
   initrd (loop)/live/initrd.img-5.10.0-18-amd64
 }
 ```
-
-# Version _dynamique_ avec une seule entrée
+## Version _dynamique_ avec une seule entrée
 - Image ISO LiveCD **Debian** sur la partition de boot.
 - Extraction automatique des noms des fichiers de boot (via `mount $file $dir -o loop -r`).
 - Avec [désactivation du module TPM](https://askubuntu.com/a/1244886) (via `rmmod tpm`).
@@ -69,8 +65,7 @@ EOF
 
 iso_entry "/boot/images/debian-live-11.6.0-amd64-xfce+nonfree.iso" "boot=live toram"
 ```
-
-# Version de test _semi-dynamique_ avec sous-menus et _debug_
+## Version brouillon _semi-dynamique_ avec sous-menus et _debug_
 - Fichier `/etc/grub.d/50_boot_debian-live-11.5.0-amd64-xfce+nonfree`
 - Image ISO LiveCD **Debian** sur la partition de boot `/boot/images/debian-live-11.5.0-amd64-xfce+nonfree.iso`
 - Extraction manuelle de la version du kernel ̀`5.10.0-18-amd64`
