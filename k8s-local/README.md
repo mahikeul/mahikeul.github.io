@@ -96,7 +96,26 @@ kubectl -n kubernetes-dashboard create clusterrolebinding admin-user --clusterro
 kubectl -n kubernetes-dashboard create token admin-user
 ```
 ## Mise en place de [Helm](https://helm.sh/docs/intro/quickstart/), package manager for Kubernetes
-* [Installation](https://helm.sh/docs/intro/install/)
-* [Packages disponibles](https://artifacthub.io/packages/search)
+* Installation ([&#x21aa; source](https://helm.sh/docs/intro/install/#from-apt-debianubuntu)) :
+```shell
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
+```
+* Pour filtrer par nom `{chart-name-filter}` les _charts_ disponibles sur le [`hub`](https://artifacthub.io/packages/search) (sans filtre, tous les _charts_ seront listés) :
+```shell
+helm search hub {chart-name-filter}
+```
+* Pour ajouter un repo ([_Harbor_](https://goharbor.io/docs/1.10/working-with-projects/working-with-images/managing-helm-charts/) par exemple, optionnellement en ciblant directement un projet `${HARBOR_HELM_PROJECT_NAME}` dans le cas où l'accès à tous les projets soit restreint par environnement) :
+```shell
+helm repo add --username=${HARBOR_USER} --password=${HARBOR_PASSWORD} myrepo ${HARBOR_HTTPS_HOST}/chartrepo/${HARBOR_HELM_PROJECT_NAME}
+```
+* Pour filtrer par nom `{chart-name-filter}` les _charts_ dans les repos ajoutés (le nom du _chart_ étant de la forme `{nom-du-repo}/{nom-du-chart}`, et la recherche étant locale et doit être mise à-jour avec la commande `helm repo update`) :
+```shell
+helm search repo {chart-name-filter}
+```
 ## Pour aller plus loin
 * [How to use Podman inside of Kubernetes](https://www.redhat.com/sysadmin/podman-inside-kubernetes)
+* [Using Helm](https://helm.sh/docs/intro/using_helm/)
