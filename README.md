@@ -69,7 +69,7 @@ podman run -p 9005:8000 --name kroki docker.io/yuzutech/kroki
 ```shell
 podman run -p 9002:8080 --name swagger-ui docker.io/swaggerapi/swagger-ui
 ```
-## [VSCodium](https://github.com/VSCodium/vscodium/), VS Code sans télémétrie, ni extension propriétaire
+## [VSCodium](https://github.com/VSCodium/vscodium/) : VS Code sans télémétrie, ni extension propriétaire
 - Installation :
 ```shell
 sudo apt install extrepo
@@ -80,7 +80,7 @@ sudo apt install codium
 - Extensions utilisées ([&#x21aa; magasin *OpenSource* par défaut](https://open-vsx.org/)) :
   - [kubernetes](https://open-vsx.org/extension/ms-kubernetes-tools/vscode-kubernetes-tools) : nécessite `kubectl`, `docker` ou `buildah`, `helm` (pour installation, voir article [k8s local](k8s-local/README.md)).
   - [PlantUML](https://open-vsx.org/extension/jebbs/plantuml) : utilisation locale de [`plantuml-server`](https://github.com/plantuml/plantuml-server) recommandée (voir l'article [Quelques containeurs utiles](#quelques-containeurs-utiles)).
-## [Barrier](https://github.com/debauchee/barrier), partage de clavier/souris/presse-papier entre ordinateurs
+## [Barrier](https://github.com/debauchee/barrier) : partage de clavier/souris/presse-papier entre ordinateurs
 - Installation :
 ```shell
 sudo apt install barrier
@@ -113,7 +113,7 @@ providers:
 docker run -d -p 8080:8080 -p 80:80 -p 443:443 -v $(pwd)/traefik.yml:/etc/traefik/traefik.yml -v /var/run/docker.sock:/var/run/docker.sock --name traefik traefik
 ```
 - Accès au tableau de bord : http://localhost:8080/dashboard
-## Ajouter une résolution personnalisée
+## `xrandr` : ajouter une résolution personnalisée
 - Génération d'une _modeline_ avec `cvt` (alternative ? `gtf`). Par exemple, paramétrer une résolution pour pouvoir faire du _PBP_ (côte-à-côte) sur son écran 4K avec un taux de rafraichissement de 30Hz (parce que l'entrée HDMI-1 de votre écran ne supporte pas un taux plus élevé dans une résolution supérieure à 1920x1080):
 ```shell
 cvt 1920 2180 30
@@ -123,12 +123,12 @@ cvt 1920 2180 30
 # 1920x2160 29.96 Hz (CVT) hsync: 65.92 kHz; pclk: 168.75 MHz
 Modeline "1920x2160_30.00"  168.75  1920 2040 2240 2560  2160 2163 2173 2200 -hsync +vsync
 ```
-- Maintenant, il faut indiquer à `xrandr` la configuration de cette nouvelle _modeline_ :
+- Maintenant, il faut indiquer à `xrandr` la configuration de cette nouvelle _modeline_ (copier/coller de la dernière ligne sans `ModeLine`) :
 ```shell
 xrandr --newmode "1920x2160_30"  168.75  1920 2040 2240 2560  2160 2163 2173 2200 -hsync +vsync
 ```
 - On peut maintenant ajouter cette nouvelle résolution à celles disponibles pour une sortie spécifiée :
-```
+```shell
 xrandr --addmode HDMI-1 1920x2160_30
 ```
 - Les différentes sorties sont à retrouver avec la simple commande `xrandr`.  
@@ -136,4 +136,48 @@ xrandr --addmode HDMI-1 1920x2160_30
 - Pour appliquer en ligne de commande la résolution nommée `1920x2160_30` à la sortie `HDMI-1` :
 ```shell
 xrandr --output HDMI-1 --mode 1920x2160_30
+```
+## [nvm](https://github.com/nvm-sh/nvm) : Node Version Manager
+- Installation par `git` ([&#x21aa; source](https://github.com/nvm-sh/nvm#git-install)).  
+Récupération des sources :
+```shell
+git clone https://github.com/nvm-sh/nvm.git
+```
+- Si non cloné dans le répertoire `~/.nvm`, créer un lien :
+```shell
+ln -s $(pwd)/nvm ~/.nvm
+```
+- Se placer dans le répertoire (`cd ~/.nvm`) et pointer sur la dernière version :
+```shell
+git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+```
+- Activation de la version pointée :
+```shell
+. ./nvm.sh
+```
+- Activation de la complétion `bash` :
+```shell
+. ./bash_completion
+```
+- Lignes à rajouter à `~/.bashrc` pour que les 2 activations précédentes soient prises en compte au login :
+```shell
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+```
+- Pour mettre à-jour `nvm`, synchroniser l'historique `git` avec la commande suivante dans le répertoire `cd ${NVM_DIR}`, pour ensuite pointer sur la dernière version avec la commande `git checkout` décrite plus haut, suivi d'un `source ~/.bashrc` (prise en compte des activations) :
+```shell
+git fetch --tags origin
+```
+- Lister les principales versions de `node` disponibles :
+```shell
+nvm ls
+```
+- Installer une version (ici, la dernière version de la branche `14`) :
+```shell
+nvm install 14
+```
+- Pour spécifier une version de travail (ici, la version correspondant à la branche `14`) :
+```shell
+nvm use 14
 ```
