@@ -22,6 +22,11 @@ sudo apt-get update && sudo apt-get install kubectl
 ```shell
 sudo apt-get install podman slirp4netns fuse-overlayfs golang
 ```
+* Utile : créer une copie du fichier `/etc/hosts` (par exemple vers `/etc/hosts.containers`) en supprimant les _host_ (généralement sur la ligne `127.0.0.1`) qui pourraient [interférer avec les noms des containeurs](https://github.com/containers/podman/issues/13748) (ou les `hostname`) déclarés dans les `docker-compose.yml`.  
+Cette copie/adaptation sera utilisée lors de la création des containeurs, en modifiant le fichier de configuration `/usr/share/containers/containers.conf` :
+```
+base_hosts_file = "/etc/hosts.containers"
+```
 * Installation de kind (`latest` = `v0.20.0`) (autres méthodes d'installation et dernière version dans la [doc](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-install))  
   (`${HOME}/go/bin` doit être dans le `$PATH` pour que la commande `kind` soit ensuite disponible: `sudo micro /etc/profile`) :
 ```shell

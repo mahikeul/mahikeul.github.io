@@ -114,7 +114,7 @@ docker run -d -p 8080:8080 -p 80:80 -p 443:443 -v $(pwd)/traefik.yml:/etc/traefi
 ```
 - Accès au tableau de bord : http://localhost:8080/dashboard
 ## `xrandr` : ajouter une résolution personnalisée
-- Génération d'une _modeline_ avec `cvt` (alternative ? `gtf`). Par exemple, paramétrer une résolution pour pouvoir faire du _PBP_ (côte-à-côte) sur son écran 4K avec un taux de rafraichissement de 30Hz (parce que l'entrée HDMI-1 de votre écran ne supporte pas un taux plus élevé dans une résolution supérieure à 1920x1080):
+- Génération d'une _modeline_ avec `cvt` (alternative ? `gtf`). Par exemple, paramétrer une résolution pour pouvoir faire du _PBP_ (images côte-à-côte) sur son écran 4K avec un taux de rafraichissement de 30Hz (parce que l'entrée `HDMI-1` de votre écran ne supporte pas un taux plus élevé dans une résolution supérieure à `1920x1080`):
 ```shell
 cvt 1920 2180 30
 ```
@@ -127,7 +127,7 @@ Modeline "1920x2160_30.00"  168.75  1920 2040 2240 2560  2160 2163 2173 2200 -hs
 ```shell
 xrandr --newmode "1920x2160_30"  168.75  1920 2040 2240 2560  2160 2163 2173 2200 -hsync +vsync
 ```
-- On peut maintenant ajouter cette nouvelle résolution à celles disponibles pour une sortie spécifiée :
+- On peut maintenant ajouter (mais pas appliquer) cette nouvelle résolution (nommée `1920x2160_30`) à celles disponibles pour une sortie spécifiée (ici `HDMI-1`) :
 ```shell
 xrandr --addmode HDMI-1 1920x2160_30
 ```
