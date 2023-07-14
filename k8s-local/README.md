@@ -17,15 +17,26 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update && sudo apt-get install kubectl
 ```
-* Installation de podman ([`4.3.1`](https://packages.debian.org/testing/podman)), slirp4netns ([`1.2.0`](https://packages.debian.org/testing/slirp4netns)), fuse-overlayfs ([`1.10`](https://packages.debian.org/testing/fuse-overlayfs)) et golang ([`1.19`](https://packages.debian.org/testing/golang))  
+* Installation de `podman` ([`4.3.1`](https://packages.debian.org/testing/podman)), `podman-compose` ([`1.0.3`](https://packages.debian.org/testing/podman-compose)), `slirp4netns` ([`1.2.0`](https://packages.debian.org/testing/slirp4netns)), `fuse-overlayfs` ([`1.10`](https://packages.debian.org/testing/fuse-overlayfs)) et `golang` ([`1.19`](https://packages.debian.org/testing/golang))  
   (pour installer la version de `kubectl` de la distribution, ajouter [`kubernetes-client`](https://packages.debian.org/testing/kubernetes-client)) :
 ```shell
-sudo apt-get install podman slirp4netns fuse-overlayfs golang
+sudo apt-get install podman podman-compose slirp4netns fuse-overlayfs golang
 ```
-* Utile : créer une copie du fichier `/etc/hosts` (par exemple vers `/etc/hosts.containers`) en supprimant les _host_ (généralement sur la ligne `127.0.0.1`) qui pourraient [interférer avec les noms des containeurs](https://github.com/containers/podman/issues/13748) (ou les `hostname`) déclarés dans les `docker-compose.yml`.  
-Cette copie/adaptation sera utilisée lors de la création des containeurs, en modifiant le fichier de configuration `/usr/share/containers/containers.conf` :
+* Bonus : créer une copie du fichier `/etc/hosts` (par exemple vers `/etc/hosts.containers`) en supprimant les _host_ (généralement sur la ligne `127.0.0.1`) qui pourraient [interférer avec les noms des conteneurs](https://github.com/containers/podman/issues/13748) (ou les `hostname`) déclarés dans les `docker-compose.yml`.  
+Cette copie/adaptation sera utilisée lors de la création des conteneurs, en modifiant le fichier de configuration `/usr/share/containers/containers.conf` :
 ```
 base_hosts_file = "/etc/hosts.containers"
+```
+* Bonus : ci-dessous, la configuration à ajouter pour que `podman` soit pris en compte à la place de `docker` par le [plugin VSCode](https://github.com/microsoft/vscode-docker/).  
+Remarque : [si la dernière version du plugin ne fonctionne pas](https://developers.redhat.com/articles/2023/02/14/remote-container-development-vs-code-and-podman#comment-6127453899), installer la version `v1.22.2` (sous-menu de l'extension : _Install another version ..._).
+Pour cette version, c'est le paramètre `docker.host` qui compte. Pour les versions supérieures, c'est `docker.environment`.
+```json
+  "docker.composeCommand": "/usr/bin/podman-compose",
+  "docker.dockerPath": "/usr/bin/podman",
+  "docker.host": "unix:///var/run/user/1000/podman/podman.sock",
+  "docker.environment": {
+    "DOCKER_HOST": "unix:///var/run/user/1000/podman/podman.sock"
+  }
 ```
 * Installation de kind (`latest` = `v0.20.0`) (autres méthodes d'installation et dernière version dans la [doc](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-install))  
   (`${HOME}/go/bin` doit être dans le `$PATH` pour que la commande `kind` soit ensuite disponible: `sudo micro /etc/profile`) :
@@ -61,7 +72,7 @@ kind get clusters
 ```shell
 kind get nodes --name vasco
 ```
-* Liste des images (`crictl images`), des containeurs (`crictl ps`) ou des pods (`crictl pods`), présents sur un noeud, en reprenant le nom du noeud (`vasco-control-plane`) de la commande précédente :
+* Liste des images (`crictl images`), des conteneurs (`crictl ps`) ou des pods (`crictl pods`), présents sur un noeud, en reprenant le nom du noeud (`vasco-control-plane`) de la commande précédente :
 ```shell
 podman exec -it vasco-control-plane crictl images
 podman exec -it vasco-control-plane crictl ps
