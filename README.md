@@ -2,9 +2,26 @@
 ## [Grub : ajouter une entrée pour démarrer un LiveCD](grub-entry-livecd/README.md)
 ## [Mise en place d'un environnement Kubernetes local](k8s-local/README.md)
 ## [Activer le DNS over TLS](dns-over-tls/README.md)
+## [podman](https://podman.io) : quelques commande utiles
+- Supprime :
+> - all stopped containers
+> - all networks not used by at least one container
+> - all images without at least one container associated with them
+> - all build cache
+```shell
+podman system prune --all
+```
+- Supprime une ou plusieurs images locales (identique à `podman image rm`)
+```shell
+podman rmi [-a,--all] [-f,--force] [-i,--ignore] [--no-prune] [<image>]
+```
+- Monter une image (`podman unshare` nécessaire en mode _rootless_) :
+```shell
+podman unshare podman image mount <image>
+```
 ## Vim : copy to clipboard
 `vim --version` : `+xterm_clipboard` needed ([&#x21aa; source](https://stackoverflow.com/a/14225889))
-## NetworkManager
+## NetworkManager : quelques commandes utiles
 - Pour qu'une connexion (_VPN_ par exemple) ne soit jamais la _route_ par défaut (pour pouvoir accéder à Internet si la connexion cible un réseau fermé) :
 ```shell
 nmcli connection modify <UUID> ipv4.never-default true
