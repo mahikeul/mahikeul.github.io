@@ -65,7 +65,7 @@ EOF
 
 iso_entry "/boot/images/debian-live-11.6.0-amd64-xfce+nonfree.iso" "boot=live toram"
 ```
-## Version brouillon _semi-dynamique_ avec sous-menus et _debug_
+## [Archivé] Version _semi-dynamique_ avec sous-menus et _debug_
 - Fichier `/etc/grub.d/50_boot_debian-live-11.5.0-amd64-xfce+nonfree`
 - Image ISO LiveCD **Debian** sur la partition de boot `/boot/images/debian-live-11.5.0-amd64-xfce+nonfree.iso`
 - Extraction manuelle de la version du kernel ̀`5.10.0-18-amd64`
