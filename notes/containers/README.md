@@ -1,5 +1,5 @@
 # Quelques conteneurs utiles
-- Pour installer `podman`, voir l'article [k8s local](k8s-local/README.md).
+- Pour installer `podman`, voir l'article [k8s local](../k8s-local/README.md).
 - [Cockpit](), pour gérer visuellement les containeurs (entre autres), par défaut à l'adresse `http://localhost:9090` :
 ```shell
 sudo apt install cockpit-podman
