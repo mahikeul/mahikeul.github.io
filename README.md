@@ -2,6 +2,7 @@
 ## [Grub : ajouter une entrée pour démarrer un LiveCD](grub-entry-livecd/README.md)
 ## [Mise en place d'un environnement Kubernetes local](k8s-local/README.md)
 ## [Activer le DNS over TLS](dns-over-tls/README.md)
+## [Fragments de code Java](java-snippets/README.md)
 ## [podman](https://podman.io) : quelques commande utiles
 - Supprime :
 > - all stopped containers
